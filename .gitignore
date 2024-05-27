@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### SSH Key ###
+/src/main/resources/app.key

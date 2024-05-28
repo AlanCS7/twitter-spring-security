@@ -5,6 +5,7 @@ import io.github.alancs7.twitter.controller.dto.UserRequest;
 import io.github.alancs7.twitter.exceptions.UserAlreadyExistsException;
 import io.github.alancs7.twitter.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserRequest userRequest) {
         try {
             authService.registerNewUser(userRequest);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity
                     .badRequest()

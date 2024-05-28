@@ -50,19 +50,17 @@ public class AuthService {
     public void registerNewUser(UserRequest userRequest) {
         var roleBasic = roleRepository.findByName(Role.Values.BASIC.name());
 
-        userRepository.findByUsername(userRequest.username())
-                .ifPresentOrElse(
-                        userFound -> {
-                            throw new UserAlreadyExistsException("User already exists");
-                        },
-                        () -> {
-                            var user = new User();
-                            user.setUsername(userRequest.username());
-                            user.setPassword(passwordEncoder.encode(userRequest.password()));
-                            user.setRoles(Set.of(roleBasic));
-                            userRepository.save(user);
-                        }
-                );
+        userRepository
+                .findByUsername(userRequest.username())
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException(String.format("User %s already exists", user.getUsername()));
+                });
+
+        var user = new User();
+        user.setUsername(userRequest.username());
+        user.setPassword(passwordEncoder.encode(userRequest.password()));
+        user.setRoles(Set.of(roleBasic));
+        userRepository.save(user);
     }
 
     private String generateToken(User user) {

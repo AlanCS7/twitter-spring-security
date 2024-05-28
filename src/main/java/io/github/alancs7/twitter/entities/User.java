@@ -30,4 +30,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    public boolean isAdmin() {
+        return roles.stream().anyMatch(role -> role.getName().equalsIgnoreCase(Role.Values.ADMIN.name()));
+    }
+
 }

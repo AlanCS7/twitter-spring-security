@@ -1,6 +1,7 @@
 package io.github.alancs7.twitter.controller;
 
 import io.github.alancs7.twitter.controller.dto.CreateTweetDto;
+import io.github.alancs7.twitter.controller.dto.FeedDto;
 import io.github.alancs7.twitter.exceptions.BusinessException;
 import io.github.alancs7.twitter.exceptions.TweetNotFoundException;
 import io.github.alancs7.twitter.service.TweetService;
@@ -23,6 +24,12 @@ public class TweetController {
     public ResponseEntity<Void> create(@RequestBody CreateTweetDto dto, JwtAuthenticationToken token) {
         tweetService.create(dto, token.getName());
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<FeedDto> getFeed(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                           @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ResponseEntity.ok(tweetService.getFeed(page, pageSize));
     }
 
     @DeleteMapping("/{id}")
